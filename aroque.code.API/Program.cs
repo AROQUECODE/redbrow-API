@@ -54,10 +54,18 @@ builder.Services.AddAuthentication(config => {
     };
 });
 
+//Enable CORS
+builder.Services.AddCors(option => {
+    option.AddPolicy("newRule", app => {
+        app.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
-//Enable CORS
-app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -66,6 +74,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
+
+app.UseCors("newRule");
 
 app.UseAuthorization();
 
